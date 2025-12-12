@@ -1,6 +1,6 @@
 {
   "name": "@componentor/breakpoint",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Parse and manage CSS styles with breakpoints, themes, and states using a compact colon syntax",
   "keywords": [
     "css",

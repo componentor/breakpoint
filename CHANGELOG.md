@@ -1,5 +1,36 @@
 # Changelog
 
+## [1.1.0] - 2025-12-12
+
+### Added
+
+- **Breakpoint Strategy System**: Three new strategies for responsive design
+  - `'exact'` (default): Match only the exact breakpoint specified
+  - `'mobile-first'`: Include styles from base up to current breakpoint
+  - `'desktop-first'`: Include styles from current breakpoint and larger
+
+- **New Type**: `BreakpointStrategy` exported for TypeScript users
+
+- **Enhanced getStyle API**: New `breakpointStrategy` option in `GetStyleOptions`
+  ```typescript
+  getStyle(parsed, {
+    breakpoint: 'md',
+    breakpointStrategy: 'mobile-first' // or 'desktop-first' or 'exact'
+  });
+  ```
+
+### Documentation
+
+- Added [BREAKPOINT_STRATEGIES.md](BREAKPOINT_STRATEGIES.md) with comprehensive guide
+- Added 20 new tests for breakpoint strategies (65 total tests)
+- All existing tests pass with backwards compatibility
+
+### Technical Details
+
+- Breakpoint order system: xs (0) → sm (1) → md (2) → lg (3) → xl (4) → 2xl (5)
+- Custom breakpoints always use exact matching regardless of strategy
+- Default strategy is 'exact' for backwards compatibility
+
 ## [1.0.0] - 2025-12-12
 
 ### Initial Release

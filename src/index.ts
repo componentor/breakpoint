@@ -1,8 +1,16 @@
 import type { ParsedStyles, ParsedStyle, GetStyleOptions, StyleConditions } from './types.js';
 
-export type { ParsedStyles, ParsedStyle, GetStyleOptions, StyleConditions, Theme, Breakpoint, State } from './types.js';
+export type { ParsedStyles, ParsedStyle, GetStyleOptions, StyleConditions, Theme, Breakpoint, State, BreakpointStrategy } from './types.js';
 
 const KNOWN_BREAKPOINTS = ['xs', 'sm', 'md', 'lg', 'xl', '2xl'];
+const BREAKPOINT_ORDER: Record<string, number> = {
+  'xs': 0,
+  'sm': 1,
+  'md': 2,
+  'lg': 3,
+  'xl': 4,
+  '2xl': 5,
+};
 const KNOWN_STATES = ['hover', 'active', 'focus', 'visited', 'focus-visible', 'focus-within', 'disabled', 'enabled', 'checked'];
 const KNOWN_THEMES = ['dark', 'light'];
 
@@ -147,20 +155,30 @@ export const parse = (input: string): ParsedStyles => {
  * Extracts CSS styles that match the given context (theme, state, breakpoint).
  *
  * @param parsedStyles - The parsed styles object from parse()
- * @param options - Context options (theme, state, breakpoint)
+ * @param options - Context options (theme, state, breakpoint, breakpointStrategy)
  * @returns CSS style string with matching properties
  *
  * @example
  * const parsed = parse('color:red; dark:color:white');
  * getStyle(parsed, { theme: 'dark' }); // Returns: 'color: white;'
+ *
+ * @example
+ * const parsed = parse('font-size:14px; md:font-size:18px; lg:font-size:24px');
+ * getStyle(parsed, { breakpoint: 'lg', breakpointStrategy: 'mobile-first' });
+ * // Returns: 'font-size: 24px;' (includes base + md + lg)
  */
 export const getStyle = (
   parsedStyles: ParsedStyles,
   options: GetStyleOptions = {}
 ): string => {
-  const { theme, state, breakpoint } = options;
+  const { theme, state, breakpoint, breakpointStrategy = 'exact' } = options;
 
   const matchingStyles: Array<{ property: string; value: string }> = [];
+
+  // Get breakpoint index for strategy matching
+  const currentBreakpointIndex = breakpoint && BREAKPOINT_ORDER[breakpoint] !== undefined
+    ? BREAKPOINT_ORDER[breakpoint]
+    : -1;
 
   for (const style of parsedStyles.styles) {
     const { conditions } = style;
@@ -178,13 +196,40 @@ export const getStyle = (
       matches = false;
     }
 
-    // If style has a breakpoint condition, it must match
-    if (conditions.breakpoint !== undefined && conditions.breakpoint !== breakpoint) {
+    // Handle breakpoint matching based on strategy
+    if (conditions.breakpoint !== undefined && breakpoint !== undefined) {
+      const styleBreakpointIndex = BREAKPOINT_ORDER[conditions.breakpoint];
+
+      if (styleBreakpointIndex !== undefined && currentBreakpointIndex !== -1) {
+        // Known breakpoints - apply strategy
+        if (breakpointStrategy === 'exact') {
+          // Exact match only
+          if (conditions.breakpoint !== breakpoint) {
+            matches = false;
+          }
+        } else if (breakpointStrategy === 'mobile-first') {
+          // Include styles from current breakpoint and below
+          if (styleBreakpointIndex > currentBreakpointIndex) {
+            matches = false;
+          }
+        } else if (breakpointStrategy === 'desktop-first') {
+          // Include styles from current breakpoint and above
+          if (styleBreakpointIndex < currentBreakpointIndex) {
+            matches = false;
+          }
+        }
+      } else {
+        // Custom breakpoints - exact match only
+        if (conditions.breakpoint !== breakpoint) {
+          matches = false;
+        }
+      }
+    } else if (conditions.breakpoint !== undefined && breakpoint === undefined) {
+      // Style has breakpoint but no breakpoint provided - don't match
       matches = false;
     }
 
-    // If no conditions specified on the style, it matches only when no options are provided
-    // OR we can consider base styles always apply - let's make base styles always apply
+    // If no conditions specified on the style, it always applies (base styles)
     const hasConditions = conditions.theme !== undefined ||
                          conditions.state !== undefined ||
                          conditions.breakpoint !== undefined;
