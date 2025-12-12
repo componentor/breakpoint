@@ -1,5 +1,75 @@
 # Changelog
 
+## [1.3.0] - 2025-12-12
+
+### Added
+
+- **CSS Property Aliases**: Shorthand aliases for common CSS properties
+  - **75+ built-in aliases** for concise styling
+  - Use `bg` instead of `background`, `text` instead of `color`, `w` instead of `width`, etc.
+  - Full list includes spacing (`m`, `p`, `mt`, `px`), sizing (`w`, `h`, `min-w`), flexbox (`justify`, `items`, `align`), grid (`grid-cols`, `col`), and more
+  - Only meaningful property-to-property aliases are included (no value or function aliases)
+
+- **Custom Alias Registration**: Register your own property aliases
+  ```typescript
+  registerAlias('bgc', 'background-color');
+  registerAliases({
+    'txt': 'color',
+    'fw': 'font-weight'
+  });
+  ```
+
+- **Alias Management Functions**:
+  - `registerAlias(alias, property)` - Register a single alias
+  - `registerAliases(object)` - Register multiple aliases at once
+  - `clearCustomAliases()` - Clear all custom aliases
+  - `getAllAliases()` - Get all registered aliases (built-in + custom)
+  - `isAlias(property)` - Check if a property name is an alias
+  - `DEFAULT_ALIASES` - Access the complete built-in alias map
+
+### Examples
+
+```typescript
+// Use property aliases for concise styling
+const styles = parse(`
+  bg:blue;
+  text:white;
+  p:10px-20px;
+  shadow:0-2px-4px-rgba(0,0,0,0.1);
+  hover:bg:darkblue;
+  dark:bg:black;
+  md:p:30px
+`);
+
+// Resolves to full CSS properties:
+// background: blue;
+// color: white;
+// padding: 10px-20px;
+// box-shadow: 0-2px-4px-rgba(0,0,0,0.1);
+// etc.
+```
+
+### Fixed
+
+- **Removed broken filter function aliases**: Removed `blur`, `brightness`, `contrast`, `grayscale`, `hue-rotate`, `invert`, `saturate`, `sepia` which incorrectly mapped filter functions to the `filter` property (e.g., `blur:5px` would become `filter: 5px` instead of `filter: blur(5px)`)
+- **Removed broken transform function aliases**: Removed `scale-x`, `scale-y`, `translate-x`, `translate-y`, `skew-x`, `skew-y` which incorrectly mapped transform functions to properties
+- **Removed CSS value aliases**: Removed `flex-row` and `flex-col` which mapped to CSS values rather than properties
+- **Improved `align` alias**: Changed from `align: vertical-align` to `align: align-self` for better modern layout support (flexbox/grid)
+
+### Documentation
+
+- Added 25 comprehensive tests for alias system (128 total tests)
+- Custom aliases can override built-in ones
+- Aliases work seamlessly with themes, breakpoints, and states
+- All aliases now properly map property names to property names (no value or function aliases)
+
+### Technical Details
+
+- Alias resolution happens during parsing
+- Zero performance impact (resolved once during parse)
+- Type-safe alias registration
+- Custom aliases have priority over built-in ones
+
 ## [1.2.0] - 2025-12-12
 
 ### Added

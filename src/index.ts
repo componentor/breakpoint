@@ -1,6 +1,8 @@
 import type { ParsedStyles, ParsedStyle, GetStyleOptions, StyleConditions, Theme } from './types.js';
+import { resolveProperty } from './aliases.js';
 
 export type { ParsedStyles, ParsedStyle, GetStyleOptions, StyleConditions, Theme, Breakpoint, State, BreakpointStrategy, ThemeStrategy } from './types.js';
+export { registerAlias, registerAliases, clearCustomAliases, getAllAliases, isAlias, DEFAULT_ALIASES } from './aliases.js';
 
 const KNOWN_BREAKPOINTS = ['xs', 'sm', 'md', 'lg', 'xl', '2xl'];
 const BREAKPOINT_ORDER: Record<string, number> = {
@@ -141,8 +143,11 @@ export const parse = (input: string): ParsedStyles => {
       }
     }
 
+    // Resolve property alias to full CSS property name
+    const resolvedProperty = resolveProperty(property);
+
     styles.push({
-      property,
+      property: resolvedProperty,
       value,
       conditions,
     });

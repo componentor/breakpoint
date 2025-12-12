@@ -13,7 +13,8 @@ A TypeScript library for parsing and managing CSS styles with breakpoints, theme
 - Full TypeScript support with type definitions
 - ESM modules that work in browsers and Node.js
 - Zero dependencies
-- Comprehensive test coverage (103 tests)
+- **CSS Property Aliases** - Concise shorthand notation (bg, text, w, h, p, m, etc.)
+- Comprehensive test coverage (128 tests)
 
 ## Installation
 
@@ -52,6 +53,105 @@ Where conditions can be:
 - **Theme**: `dark`, `light`, or custom theme names
 - **Breakpoint**: `xs`, `sm`, `md`, `lg`, `xl`, `2xl`, or custom breakpoints
 - **State**: `hover`, `active`, `focus`, `visited`, `focus-visible`, `disabled`, etc.
+
+## CSS Property Aliases
+
+To make your styles more concise, the library supports **property aliases**. Use shorthand like `bg` instead of `background`, `text` instead of `color`, `w` instead of `width`, and many more.
+
+### Common Aliases
+
+```typescript
+import { parse, getStyle } from '@componentor/breakpoints';
+
+// Use aliases for cleaner syntax
+const styles = parse('bg:blue; text:white; p:20px; shadow:0-2px-4px-rgba(0,0,0,0.1)');
+
+// Aliases are automatically resolved to full CSS properties
+getStyle(styles);
+// Returns: "background: blue; color: white; padding: 20px; box-shadow: 0-2px-4px-rgba(0,0,0,0.1);"
+```
+
+### Built-in Aliases
+
+The library includes **75+ built-in aliases** covering:
+
+- **Background**: `bg` → `background`, `bg-color` → `background-color`
+- **Text**: `text` → `color`
+- **Spacing**: `m` → `margin`, `mt` → `margin-top`, `mx` → `margin-inline`, `p` → `padding`, `px` → `padding-inline`
+- **Sizing**: `w` → `width`, `h` → `height`, `min-w` → `min-width`, `max-h` → `max-height`
+- **Border**: `border-w` → `border-width`, `border-t` → `border-top`
+- **Flexbox**: `justify` → `justify-content`, `items` → `align-items`, `align` → `align-self`
+- **Grid**: `grid-cols` → `grid-template-columns`, `col` → `grid-column`, `gap-x` → `column-gap`
+- **Effects**: `shadow` → `box-shadow`, `mix-blend` → `mix-blend-mode`
+- **Position**: `z` → `z-index`, `inset-x` → `inset-inline`
+- **Typography**: `size` → `font-size`
+- And many more!
+
+### Aliases with Conditions
+
+Aliases work seamlessly with themes, breakpoints, and states:
+
+```typescript
+const buttonStyles = parse(`
+  bg:blue;
+  text:white;
+  p:10px-20px;
+  border-radius:4px;
+  hover:bg:darkblue;
+  dark:bg:#1e40af;
+  md:p:16px-32px
+`);
+
+// Light theme, mobile
+getStyle(buttonStyles);
+// "background: blue; color: white; padding: 10px-20px; border-radius: 4px;"
+
+// Dark theme, tablet, hover
+getStyle(buttonStyles, { theme: 'dark', breakpoint: 'md', state: 'hover' });
+// "background: darkblue; color: white; padding: 16px-32px; border-radius: 4px;"
+```
+
+### Custom Aliases
+
+Register your own custom aliases:
+
+```typescript
+import { registerAlias, registerAliases } from '@componentor/breakpoints';
+
+// Register a single alias
+registerAlias('bgc', 'background-color');
+
+// Register multiple aliases at once
+registerAliases({
+  'txt': 'color',
+  'fw': 'font-weight',
+  'fs': 'font-size'
+});
+
+// Use your custom aliases
+const styles = parse('bgc:red; txt:white; fw:bold; fs:16px');
+getStyle(styles);
+// "background-color: red; color: white; font-weight: bold; font-size: 16px;"
+```
+
+### Alias Utilities
+
+```typescript
+import { isAlias, getAllAliases, clearCustomAliases } from '@componentor/breakpoints';
+
+// Check if a property is an alias
+isAlias('bg');        // true
+isAlias('background'); // false
+
+// Get all registered aliases (built-in + custom)
+const allAliases = getAllAliases();
+// { bg: 'background', text: 'color', w: 'width', ... }
+
+// Clear all custom aliases
+clearCustomAliases();
+```
+
+**Note:** Custom aliases take priority over built-in aliases, so you can override defaults if needed.
 
 ### Examples
 
@@ -321,6 +421,68 @@ getThemedStyle(styles, {});           // Light theme
 getThemedStyle(styles, {}, true);     // Dark theme
 getThemedStyle(styles, { theme: 'custom' }); // Custom theme with fallback
 ```
+
+### Alias Functions
+
+#### `registerAlias(alias: string, property: string): void`
+
+Register a single custom alias.
+
+**Parameters:**
+- `alias` - The short alias name
+- `property` - The full CSS property name
+
+**Example:**
+```typescript
+registerAlias('bgc', 'background-color');
+```
+
+#### `registerAliases(aliases: Record<string, string>): void`
+
+Register multiple custom aliases at once.
+
+**Parameters:**
+- `aliases` - Object mapping alias names to CSS properties
+
+**Example:**
+```typescript
+registerAliases({
+  'txt': 'color',
+  'fw': 'font-weight',
+  'fs': 'font-size'
+});
+```
+
+#### `clearCustomAliases(): void`
+
+Clear all custom aliases (built-in aliases remain).
+
+#### `getAllAliases(): Record<string, string>`
+
+Get all currently registered aliases (built-in + custom). Custom aliases override built-in ones.
+
+**Returns:**
+- Combined object of all aliases
+
+#### `isAlias(property: string): boolean`
+
+Check if a property name is a registered alias.
+
+**Parameters:**
+- `property` - Property name to check
+
+**Returns:**
+- `true` if it's a registered alias, `false` otherwise
+
+**Example:**
+```typescript
+isAlias('bg');        // true
+isAlias('background'); // false
+```
+
+#### `DEFAULT_ALIASES: Record<string, string>`
+
+The complete built-in alias map. Read-only reference to all 75+ built-in property aliases.
 
 ### Types
 

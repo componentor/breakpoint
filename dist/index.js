@@ -1,3 +1,5 @@
+import { resolveProperty } from './aliases.js';
+export { registerAlias, registerAliases, clearCustomAliases, getAllAliases, isAlias, DEFAULT_ALIASES } from './aliases.js';
 const KNOWN_BREAKPOINTS = ['xs', 'sm', 'md', 'lg', 'xl', '2xl'];
 const BREAKPOINT_ORDER = {
     'xs': 0,
@@ -126,8 +128,10 @@ export const parse = (input) => {
                 }
             }
         }
+        // Resolve property alias to full CSS property name
+        const resolvedProperty = resolveProperty(property);
         styles.push({
-            property,
+            property: resolvedProperty,
             value,
             conditions,
         });
