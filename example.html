@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>@componentor/breakpoints - Browser Example</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+
+    .demo-box {
+      background: white;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+
+    .code {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      padding: 15px;
+      border-radius: 4px;
+      overflow-x: auto;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+    }
+
+    .result {
+      margin-top: 10px;
+      padding: 10px;
+      background: #e8f5e9;
+      border-left: 4px solid #4caf50;
+      border-radius: 4px;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    h2 {
+      color: #555;
+      margin-top: 30px;
+    }
+
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 10px 20px;
+      background: #2196f3;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .theme-toggle:hover {
+      background: #1976d2;
+    }
+
+    body.dark-theme {
+      background: #1e1e1e;
+      color: #e0e0e0;
+    }
+
+    body.dark-theme .demo-box {
+      background: #2d2d2d;
+      border-color: #444;
+    }
+
+    body.dark-theme h1,
+    body.dark-theme h2 {
+      color: #e0e0e0;
+    }
+  </style>
+</head>
+<body>
+  <button class="theme-toggle" onclick="toggleTheme()">Toggle Dark Mode</button>
+
+  <h1>@componentor/breakpoints Browser Example</h1>
+  <p>This demonstrates the breakpoints parser working in the browser with ESM modules.</p>
+
+  <div class="demo-box">
+    <h2>Example 1: Basic Parsing</h2>
+    <div class="code">const styleString = 'color:red; padding:10px; margin:20px';</div>
+    <div class="result" id="result1"></div>
+  </div>
+
+  <div class="demo-box">
+    <h2>Example 2: Theme Support</h2>
+    <div class="code">const styleString = 'color:black; dark:color:white; background:white; dark:background:gray';</div>
+    <div class="result" id="result2"></div>
+  </div>
+
+  <div class="demo-box">
+    <h2>Example 3: Breakpoints</h2>
+    <div class="code">const styleString = 'font-size:14px; md:font-size:18px; lg:font-size:24px';</div>
+    <div class="result" id="result3"></div>
+  </div>
+
+  <div class="demo-box">
+    <h2>Example 4: State (Hover)</h2>
+    <div class="code">const styleString = 'opacity:1; hover:opacity:0.8';</div>
+    <div class="result" id="result4"></div>
+  </div>
+
+  <div class="demo-box">
+    <h2>Example 5: Combined Conditions</h2>
+    <div class="code">const styleString = 'padding:10px; dark:md:hover:padding:30px; dark:md:hover:background:purple';</div>
+    <div class="result" id="result5"></div>
+  </div>
+
+  <div class="demo-box">
+    <h2>Example 6: Real-World Component</h2>
+    <div class="code">const styleString = 'display:flex; flex-direction:column; gap:10px; background:white; dark:background:black; md:flex-direction:row';</div>
+    <div class="result" id="result6"></div>
+  </div>
+
+  <script type="module">
+    import { parse, getStyle } from './dist/index.js';
+
+    // Example 1: Basic parsing
+    const example1 = 'color:red; padding:10px; margin:20px';
+    const parsed1 = parse(example1);
+    document.getElementById('result1').innerHTML = `
+      <strong>Parsed:</strong> ${JSON.stringify(parsed1, null, 2)}<br><br>
+      <strong>CSS Output:</strong> ${getStyle(parsed1)}
+    `;
+
+    // Example 2: Theme support
+    const example2 = 'color:black; dark:color:white; background:white; dark:background:gray';
+    const parsed2 = parse(example2);
+    document.getElementById('result2').innerHTML = `
+      <strong>Light theme:</strong> ${getStyle(parsed2, { theme: 'light' })}<br>
+      <strong>Dark theme:</strong> ${getStyle(parsed2, { theme: 'dark' })}
+    `;
+
+    // Example 3: Breakpoints
+    const example3 = 'font-size:14px; md:font-size:18px; lg:font-size:24px';
+    const parsed3 = parse(example3);
+    document.getElementById('result3').innerHTML = `
+      <strong>Mobile (no breakpoint):</strong> ${getStyle(parsed3)}<br>
+      <strong>Tablet (md):</strong> ${getStyle(parsed3, { breakpoint: 'md' })}<br>
+      <strong>Desktop (lg):</strong> ${getStyle(parsed3, { breakpoint: 'lg' })}
+    `;
+
+    // Example 4: State
+    const example4 = 'opacity:1; hover:opacity:0.8';
+    const parsed4 = parse(example4);
+    document.getElementById('result4').innerHTML = `
+      <strong>Normal:</strong> ${getStyle(parsed4)}<br>
+      <strong>Hover state:</strong> ${getStyle(parsed4, { state: 'hover' })}
+    `;
+
+    // Example 5: Combined
+    const example5 = 'padding:10px; dark:md:hover:padding:30px; dark:md:hover:background:purple';
+    const parsed5 = parse(example5);
+    document.getElementById('result5').innerHTML = `
+      <strong>Base:</strong> ${getStyle(parsed5)}<br>
+      <strong>Dark + MD + Hover:</strong> ${getStyle(parsed5, { theme: 'dark', breakpoint: 'md', state: 'hover' })}
+    `;
+
+    // Example 6: Real-world
+    const example6 = 'display:flex; flex-direction:column; gap:10px; background:white; dark:background:black; md:flex-direction:row';
+    const parsed6 = parse(example6);
+    document.getElementById('result6').innerHTML = `
+      <strong>Light Mobile:</strong> ${getStyle(parsed6)}<br>
+      <strong>Light Desktop:</strong> ${getStyle(parsed6, { breakpoint: 'md' })}<br>
+      <strong>Dark Mobile:</strong> ${getStyle(parsed6, { theme: 'dark' })}<br>
+      <strong>Dark Desktop:</strong> ${getStyle(parsed6, { theme: 'dark', breakpoint: 'md' })}
+    `;
+
+    // Make parse and getStyle available globally for console testing
+    window.parse = parse;
+    window.getStyle = getStyle;
+    console.log('✅ Breakpoints library loaded! Try: parse("color:red; dark:color-blue")');
+  </script>
+
+  <script>
+    function toggleTheme() {
+      document.body.classList.toggle('dark-theme');
+    }
+  </script>
+</body>
+</html>
