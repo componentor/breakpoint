@@ -201,7 +201,7 @@ const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches
 const buttonStyles = parse(`
   background:blue;
   color:white;
-  padding:10px-20px;
+  padding:10px 20px;
   dark:background:#1e40af;
   light:background:#3b82f6;
   hover:opacity:0.9;
@@ -246,18 +246,18 @@ getBrandStyles('brand-c'); // Falls back to dark colors
 ```typescript
 const cardStyles = parse(`
   background:white;
-  border:1px-solid-#e5e7eb;
+  border:1px solid #e5e7eb;
   padding:1rem;
   border-radius:0.5rem;
 
   dark:background:#1f2937;
-  dark:border:1px-solid-#374151;
+  dark:border:1px solid #374151;
 
   light:background:#ffffff;
-  light:border:1px-solid-#d1d5db;
+  light:border:1px solid #d1d5db;
 
-  hover:shadow:0-4px-6px-rgba(0,0,0,0.1);
-  dark:hover:shadow:0-4px-6px-rgba(0,0,0,0.3)
+  hover:shadow:0 4px 6px rgba(0,0,0,0.1);
+  dark:hover:shadow:0 4px 6px rgba(0,0,0,0.3)
 `);
 
 function Card({ theme = 'light', children }) {

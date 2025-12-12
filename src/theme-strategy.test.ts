@@ -296,12 +296,12 @@ describe('theme strategy', () => {
       const componentStyles = parse(`
         background:white;
         color:black;
-        border:1px-solid-gray;
+        border:1px solid gray;
         padding:20px;
 
         dark:background:black;
         dark:color:white;
-        dark:border:1px-solid-lightgray;
+        dark:border:1px solid lightgray;
 
         light:background:#fafafa;
         light:color:#333;
@@ -335,7 +335,7 @@ describe('theme strategy', () => {
       const buttonStyles = parse(`
         background:blue;
         color:white;
-        padding:10px-20px;
+        padding:10px 20px;
         border:none;
 
         hover:background:darkblue;

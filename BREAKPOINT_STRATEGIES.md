@@ -249,7 +249,7 @@ Component libraries may want precise control:
 const button = parse(`
   padding:8px-16px;
   font-size:14px;
-  sm:padding:10px-20px;
+  sm:padding:10px 20px;
   sm:font-size:16px;
   lg:padding:12px-24px;
   lg:font-size:18px

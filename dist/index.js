@@ -1,5 +1,9 @@
 import { resolveProperty } from './aliases.js';
 export { registerAlias, registerAliases, clearCustomAliases, getAllAliases, isAlias, DEFAULT_ALIASES } from './aliases.js';
+// Builder API with IntelliSense support
+export { StyleBuilder, createStyleBuilder, styleObject, getAliasHints } from './builder.js';
+// Integration utilities for other libraries
+export { BreakpointIntegration, createIntegration, integrationUtils } from './integration.js';
 const KNOWN_BREAKPOINTS = ['xs', 'sm', 'md', 'lg', 'xl', '2xl'];
 const BREAKPOINT_ORDER = {
     'xs': 0,

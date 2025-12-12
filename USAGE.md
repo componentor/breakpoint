@@ -136,10 +136,10 @@ parse('error:border:red')
 const styles = parse(`
   background:white;
   color:black;
-  border:1px-solid-gray;
+  border:1px solid gray;
   dark:background:black;
   dark:color:white;
-  dark:border:1px-solid-lightgray
+  dark:border:1px solid lightgray
 `);
 
 // Light theme
@@ -214,13 +214,13 @@ const cardStyles = parse(`
   flex-direction:column;
   padding:16px;
   background:white;
-  border:1px-solid-gray;
+  border:1px solid gray;
   border:radius:8px;
 
   hover:shadow:0:4px:12px-rgba(0,0,0,0.1);
 
   dark:background:gray900;
-  dark:border:1px-solid-gray700;
+  dark:border:1px solid gray700;
   dark:color:white;
 
   dark:hover:shadow:0:4px:12px-rgba(0,0,0,0.5);

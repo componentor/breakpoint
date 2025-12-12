@@ -11,8 +11,10 @@ A TypeScript library for parsing and managing CSS styles with breakpoints, theme
 - **Theme strategies** (strict/fallback) for graceful degradation
 - System theme detection support
 - Full TypeScript support with type definitions
+- **IntelliSense Support** - Full autocomplete for CSS properties and aliases (powered by csstype)
+- **Type-Safe Builder API** - Fluent interface with IntelliSense
+- **Integration Utilities** - Easy integration for other libraries
 - ESM modules that work in browsers and Node.js
-- Zero dependencies
 - **CSS Property Aliases** - Concise shorthand notation (bg, text, w, h, p, m, etc.)
 - Comprehensive test coverage (128 tests)
 
@@ -21,6 +23,8 @@ A TypeScript library for parsing and managing CSS styles with breakpoints, theme
 ```bash
 npm install @componentor/breakpoints
 ```
+
+> **💡 Want IntelliSense & Autocomplete?** Check out [INTELLISENSE.md](INTELLISENSE.md) for the Builder API with full TypeScript autocomplete for CSS properties and aliases!
 
 ## Usage
 
@@ -64,11 +68,11 @@ To make your styles more concise, the library supports **property aliases**. Use
 import { parse, getStyle } from '@componentor/breakpoints';
 
 // Use aliases for cleaner syntax
-const styles = parse('bg:blue; text:white; p:20px; shadow:0-2px-4px-rgba(0,0,0,0.1)');
+const styles = parse('bg:blue; text:white; p:20px; shadow:0 2px 4px rgba(0,0,0,0.1)');
 
 // Aliases are automatically resolved to full CSS properties
 getStyle(styles);
-// Returns: "background: blue; color: white; padding: 20px; box-shadow: 0-2px-4px-rgba(0,0,0,0.1);"
+// Returns: "background: blue; color: white; padding: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);"
 ```
 
 ### Built-in Aliases
@@ -95,7 +99,7 @@ Aliases work seamlessly with themes, breakpoints, and states:
 const buttonStyles = parse(`
   bg:blue;
   text:white;
-  p:10px-20px;
+  p:10px 20px;
   border-radius:4px;
   hover:bg:darkblue;
   dark:bg:#1e40af;
@@ -104,7 +108,7 @@ const buttonStyles = parse(`
 
 // Light theme, mobile
 getStyle(buttonStyles);
-// "background: blue; color: white; padding: 10px-20px; border-radius: 4px;"
+// "background: blue; color: white; padding: 10px 20px; border-radius: 4px;"
 
 // Dark theme, tablet, hover
 getStyle(buttonStyles, { theme: 'dark', breakpoint: 'md', state: 'hover' });

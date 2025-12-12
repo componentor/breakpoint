@@ -147,7 +147,7 @@ describe('getThemedStyle helper', () => {
       const buttonStyles = parse(`
         background:blue;
         color:white;
-        padding:10px-20px;
+        padding:10px 20px;
         border-radius:4px;
         light:background:#3b82f6;
         light:color:#ffffff;
@@ -161,7 +161,7 @@ describe('getThemedStyle helper', () => {
       const light = getThemedStyle(buttonStyles, {});
       expect(light).toContain('background: #3b82f6;');
       expect(light).toContain('color: #ffffff;');
-      expect(light).toContain('padding: 10px-20px;');
+      expect(light).toContain('padding: 10px 20px;');
 
       // Dark theme button
       const dark = getThemedStyle(buttonStyles, {}, true);
@@ -177,15 +177,15 @@ describe('getThemedStyle helper', () => {
       const cardStyles = parse(`
         background:white;
         padding:1rem;
-        border:1px-solid-#e5e7eb;
+        border:1px solid #e5e7eb;
         md:padding:1.5rem;
         lg:padding:2rem;
         light:background:#ffffff;
-        light:border:1px-solid-#d1d5db;
+        light:border:1px solid #d1d5db;
         dark:background:#1f2937;
-        dark:border:1px-solid-#374151;
-        hover:shadow:0-4px-6px-rgba(0,0,0,0.1);
-        dark:hover:shadow:0-4px-6px-rgba(0,0,0,0.3)
+        dark:border:1px solid #374151;
+        hover:shadow:0 4px 6px rgba(0,0,0,0.1);
+        dark:hover:shadow:0 4px 6px rgba(0,0,0,0.3)
       `);
 
       // Light theme, large screen
@@ -200,7 +200,7 @@ describe('getThemedStyle helper', () => {
       }, true);
       expect(darkMdHover).toContain('background: #1f2937;');
       expect(darkMdHover).toContain('padding: 1.5rem;');
-      expect(darkMdHover).toContain('shadow: 0-4px-6px-rgba(0,0,0,0.3);');
+      expect(darkMdHover).toContain('shadow: 0 4px 6px rgba(0,0,0,0.3);');
     });
   });
 });

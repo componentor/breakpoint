@@ -34,8 +34,8 @@
 const styles = parse(`
   bg:blue;
   text:white;
-  p:10px-20px;
-  shadow:0-2px-4px-rgba(0,0,0,0.1);
+  p:10px 20px;
+  shadow:0 2px 4px rgba(0,0,0,0.1);
   hover:bg:darkblue;
   dark:bg:black;
   md:p:30px
@@ -44,8 +44,8 @@ const styles = parse(`
 // Resolves to full CSS properties:
 // background: blue;
 // color: white;
-// padding: 10px-20px;
-// box-shadow: 0-2px-4px-rgba(0,0,0,0.1);
+// padding: 10px 20px;
+// box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 // etc.
 ```
 

@@ -56,7 +56,7 @@ describe('CSS Property Aliases', () => {
     });
 
     it('should resolve border aliases (border-w)', () => {
-      const styles = parse('border-w:2px; border:1px-solid-red');
+      const styles = parse('border-w:2px; border:1px solid red');
 
       expect(styles.styles[0].property).toBe('border-width');
       expect(styles.styles[1].property).toBe('border');
@@ -79,7 +79,7 @@ describe('CSS Property Aliases', () => {
     });
 
     it('should resolve effect aliases (shadow, opacity)', () => {
-      const styles = parse('shadow:0-4px-6px-rgba(0,0,0,0.1); opacity:0.5');
+      const styles = parse('shadow:0 4px 6px rgba(0,0,0,0.1); opacity:0.5');
 
       expect(styles.styles[0].property).toBe('box-shadow');
       expect(styles.styles[1].property).toBe('opacity');
@@ -259,19 +259,19 @@ describe('CSS Property Aliases', () => {
       const buttonStyles = parse(`
         bg:blue;
         text:white;
-        p:10px-20px;
+        p:10px 20px;
         rounded:4px;
         border:none;
         cursor:pointer;
         hover:bg:darkblue;
-        hover:shadow:0-2px-4px-rgba(0,0,0,0.2);
+        hover:shadow:0 2px 4px rgba(0,0,0,0.2);
         dark:bg:#1e40af;
         dark:hover:bg:#1e3a8a
       `);
 
       const lightHover = getStyle(buttonStyles, { state: 'hover' });
       expect(lightHover).toContain('background: darkblue;');
-      expect(lightHover).toContain('box-shadow: 0-2px-4px-rgba(0,0,0,0.2);');
+      expect(lightHover).toContain('box-shadow: 0 2px 4px rgba(0,0,0,0.2);');
 
       const darkHover = getStyle(buttonStyles, { theme: 'dark', state: 'hover' });
       expect(darkHover).toContain('background: #1e3a8a;');
@@ -282,11 +282,11 @@ describe('CSS Property Aliases', () => {
         bg:white;
         p:1rem;
         rounded:8px;
-        shadow:0-1px-3px-rgba(0,0,0,0.1);
+        shadow:0 1px 3px rgba(0,0,0,0.1);
         md:p:1.5rem;
         lg:p:2rem;
         dark:bg:#1f2937;
-        dark:shadow:0-1px-3px-rgba(0,0,0,0.5)
+        dark:shadow:0 1px 3px rgba(0,0,0,0.5)
       `);
 
       const lightMobile = getStyle(cardStyles, {});

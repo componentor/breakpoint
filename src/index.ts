@@ -4,6 +4,12 @@ import { resolveProperty } from './aliases.js';
 export type { ParsedStyles, ParsedStyle, GetStyleOptions, StyleConditions, Theme, Breakpoint, State, BreakpointStrategy, ThemeStrategy } from './types.js';
 export { registerAlias, registerAliases, clearCustomAliases, getAllAliases, isAlias, DEFAULT_ALIASES } from './aliases.js';
 
+// Builder API with IntelliSense support
+export { StyleBuilder, createStyleBuilder, styleObject, getAliasHints, type CSSProperty, type PropertyAlias, type StyleObject } from './builder.js';
+
+// Integration utilities for other libraries
+export { BreakpointIntegration, createIntegration, integrationUtils } from './integration.js';
+
 const KNOWN_BREAKPOINTS = ['xs', 'sm', 'md', 'lg', 'xl', '2xl'];
 const BREAKPOINT_ORDER: Record<string, number> = {
   'xs': 0,

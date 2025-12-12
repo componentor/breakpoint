@@ -119,7 +119,7 @@ describe('performance tests', () => {
     const componentStyles = [
       'display:flex; align-items:center; padding:10px; background:white; dark:background:gray',
       'font-size:14px; color:black; dark:color:white; md:font-size:16px; lg:font-size:18px',
-      'margin:0; padding:20px; border:1px-solid-gray; hover:border:blue; active:border:darkblue',
+      'margin:0; padding:20px; border:1px solid gray; hover:border:blue; active:border:darkblue',
       'width:100%; max-width:800px; margin:0-auto; padding:15px; md:padding:30px',
       'display:grid; grid-template-columns:1fr; gap:20px; md:grid-template-columns:1fr-1fr; lg:grid-template-columns:1fr-1fr-1fr',
     ];
