@@ -5,13 +5,15 @@ A TypeScript library for parsing and managing CSS styles with breakpoints, theme
 ## Features
 
 - Parse enhanced style strings with conditional prefixes
-- Support for themes (dark/light/custom)
-- Support for breakpoints (xs/sm/md/lg/xl/2xl/custom)
-- Support for states (hover/active/focus/etc.)
+- **Unlimited custom themes** (dark/light/custom) with smart fallback strategies
+- **Breakpoint strategies** (mobile-first/desktop-first/exact) for responsive design
+- Support for interactive states (hover/active/focus/etc.)
+- **Theme strategies** (strict/fallback) for graceful degradation
+- System theme detection support
 - Full TypeScript support with type definitions
 - ESM modules that work in browsers and Node.js
 - Zero dependencies
-- Comprehensive test coverage
+- Comprehensive test coverage (103 tests)
 
 ## Installation
 
@@ -135,6 +137,147 @@ getStyle(buttonStyles);
 getStyle(buttonStyles, { breakpoint: 'lg', theme: 'dark', state: 'hover' });
 ```
 
+## Theme Strategies
+
+The library supports two theme matching strategies:
+
+### Strict (Default)
+
+Only matches the exact theme specified:
+
+```typescript
+const styles = parse('color:blue; dark:color:white; light:color:black');
+
+getStyle(styles, { theme: 'dark' });
+// Returns: "color: white;"
+
+getStyle(styles, { theme: 'custom' });
+// Returns: "color: blue;" (only base, no custom theme defined)
+```
+
+### Fallback
+
+Automatically falls back to other available themes when the requested theme doesn't exist:
+
+```typescript
+const styles = parse('color:blue; dark:color:white');
+
+// Light theme doesn't exist, falls back to dark
+getStyle(styles, { theme: 'light', themeStrategy: 'fallback' });
+// Returns: "color: white;"
+
+// Custom theme doesn't exist, falls back to dark
+getStyle(styles, { theme: 'midnight', themeStrategy: 'fallback' });
+// Returns: "color: white;"
+```
+
+### Helper for Common Pattern
+
+Use `getThemedStyle` for automatic dark/light theming with fallback:
+
+```typescript
+import { parse, getThemedStyle } from '@componentor/breakpoints';
+
+const styles = parse('bg:white; dark:bg:black; color:gray; dark:color:white');
+
+// Light theme (default)
+getThemedStyle(styles, {});
+// Returns: "bg: white; color: gray;"
+
+// Dark theme
+getThemedStyle(styles, {}, true);
+// Returns: "bg: black; color: white;"
+
+// With breakpoints and states
+getThemedStyle(styles, { breakpoint: 'md', state: 'hover' });
+```
+
+### System Theme Detection
+
+```typescript
+// Detect user's system preference
+const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches
+  ? 'dark'
+  : 'light';
+
+const styles = parse(`
+  background:white;
+  color:black;
+  dark:background:#1a1a1a;
+  dark:color:#e5e5e5
+`);
+
+const css = getStyle(styles, {
+  theme: systemTheme,
+  themeStrategy: 'fallback'
+});
+```
+
+See [THEME_STRATEGIES.md](THEME_STRATEGIES.md) for detailed documentation.
+
+## Custom Themes
+
+The library supports **unlimited custom theme names** beyond `dark` and `light`:
+
+```typescript
+const styles = parse(`
+  background:white;
+  dark:background:black;
+  midnight:background:#1a1a2e;
+  sunset:background:#ff6b6b;
+  ocean:background:#006994
+`);
+
+getStyle(styles, { theme: 'midnight' });
+// Returns: "background: #1a1a2e;"
+
+getStyle(styles, { theme: 'sunset' });
+// Returns: "background: #ff6b6b;"
+```
+
+### Important: Avoid Name Conflicts
+
+**Do not use the same names as breakpoints or states for themes:**
+
+```typescript
+// ❌ BAD - 'md' is a known breakpoint
+parse('md:background:blue');
+// Interpreted as breakpoint, not theme!
+
+// ✅ GOOD - Use distinct theme names
+parse('medium-theme:background:blue');
+// Clearly a custom theme
+```
+
+**Condition Resolution Order:**
+1. If name matches a known breakpoint (`xs`, `sm`, `md`, `lg`, `xl`, `2xl`) → treated as **breakpoint**
+2. Else if name matches a known state (`hover`, `active`, `focus`, etc.) → treated as **state**
+3. Else → treated as **custom theme**
+
+This allows infinite theme names while maintaining predictable behavior. Just avoid using `xs`, `sm`, `md`, `lg`, `xl`, `2xl`, `hover`, `active`, `focus`, `visited`, `focus-visible`, `focus-within`, `disabled`, `enabled`, or `checked` as theme names.
+
+## Breakpoint Strategies
+
+The library supports three breakpoint matching strategies:
+
+```typescript
+const styles = parse('font-size:14px; sm:font-size:16px; md:font-size:18px; lg:font-size:20px');
+
+// Exact (default): Only match the specified breakpoint
+getStyle(styles, { breakpoint: 'md' });
+// Returns: "font-size: 18px;"
+
+// Mobile-first: Include base up to current breakpoint
+getStyle(styles, { breakpoint: 'md', breakpointStrategy: 'mobile-first' });
+// Returns: "font-size: 18px;" (includes base → sm → md)
+
+// Desktop-first: Include current breakpoint and larger
+getStyle(styles, { breakpoint: 'md', breakpointStrategy: 'desktop-first' });
+// Returns: "font-size: 20px;" (includes md → lg)
+```
+
+See [BREAKPOINT_STRATEGIES.md](BREAKPOINT_STRATEGIES.md) for detailed documentation.
+
 ## API
 
 ### `parse(input: string): ParsedStyles`
@@ -158,17 +301,42 @@ Extracts CSS styles matching the given context.
 **Returns:**
 - CSS style string with matching properties
 
+### `getThemedStyle(parsedStyles: ParsedStyles, options?, preferDark?): string`
+
+Convenience helper for dark/light theming with automatic fallback. Always uses `themeStrategy: 'fallback'`.
+
+**Parameters:**
+- `parsedStyles` - The parsed styles object from `parse()`
+- `options` - Optional context (breakpoint, state, theme)
+- `preferDark` - If `true`, uses 'dark' theme; if `false`, uses 'light' theme (default: `false`)
+
+**Returns:**
+- CSS style string with matching properties
+
+**Example:**
+```typescript
+const styles = parse('bg:white; dark:bg:black');
+
+getThemedStyle(styles, {});           // Light theme
+getThemedStyle(styles, {}, true);     // Dark theme
+getThemedStyle(styles, { theme: 'custom' }); // Custom theme with fallback
+```
+
 ### Types
 
 ```typescript
 type Theme = 'dark' | 'light' | string;
 type Breakpoint = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | string;
 type State = 'hover' | 'active' | 'focus' | 'visited' | 'disabled' | string;
+type BreakpointStrategy = 'mobile-first' | 'desktop-first' | 'exact';
+type ThemeStrategy = 'strict' | 'fallback';
 
 interface GetStyleOptions {
   theme?: Theme;
   state?: State;
   breakpoint?: Breakpoint;
+  breakpointStrategy?: BreakpointStrategy;
+  themeStrategy?: ThemeStrategy;
 }
 
 interface ParsedStyles {

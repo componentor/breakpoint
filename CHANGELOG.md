@@ -26,9 +26,24 @@ When using `themeStrategy: 'fallback'`:
 - **Example**: `color:blue; dark:color:white` with `theme: 'light'` → uses `dark:color:white` as fallback
 - **Context-aware**: Breakpoint/state context influences fallback behavior
 
+### New Helper Function
+
+- **`getThemedStyle()`**: Convenience helper for dark/light theming with automatic fallback
+  ```typescript
+  getThemedStyle(styles, {});           // Light theme
+  getThemedStyle(styles, {}, true);     // Dark theme
+  ```
+
 ### Documentation
 
-- Added 24 new tests for theme strategies (89 total tests)
+- Added [THEME_STRATEGIES.md](THEME_STRATEGIES.md) with comprehensive guide
+  - Detailed fallback behavior explanation
+  - Custom theme naming conventions
+  - Real-world examples (system theme detection, multi-brand theming)
+  - Best practices and performance tips
+- Updated README with theme strategy examples
+- Clarified unlimited custom theme support and naming rules
+- Added 38 new tests (24 for theme strategies + 14 for helper function = 103 total tests)
 - All existing tests pass with backwards compatibility
 - Comprehensive test coverage for theme + breakpoint + state combinations
 

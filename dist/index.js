@@ -287,4 +287,42 @@ export const getStyle = (parsedStyles, options = {}) => {
         .join(' ');
     return cssEntries;
 };
+/**
+ * Helper function for common dark/light theme pattern with automatic fallback.
+ * Convenience wrapper around getStyle with themeStrategy: 'fallback'.
+ *
+ * @param parsedStyles - The parsed styles object from parse()
+ * @param options - Options without themeStrategy (always uses 'fallback')
+ * @param preferDark - If true, uses 'dark' theme; if false, uses 'light' theme (default: false)
+ * @returns CSS style string with matching properties
+ *
+ * @example
+ * const parsed = parse('color:gray; dark:color:white; light:color:black');
+ *
+ * // Use light theme with fallback to dark
+ * getThemedStyle(parsed, {});
+ * // Returns: 'color: black;'
+ *
+ * // Use dark theme with fallback to light
+ * getThemedStyle(parsed, {}, true);
+ * // Returns: 'color: white;'
+ *
+ * @example
+ * // With breakpoints and states
+ * const styles = parse('bg:blue; dark:bg:black; hover:opacity:0.9');
+ *
+ * getThemedStyle(styles, {
+ *   breakpoint: 'md',
+ *   state: 'hover'
+ * });
+ * // Automatically uses light theme with fallback
+ */
+export const getThemedStyle = (parsedStyles, options = {}, preferDark = false) => {
+    const theme = options.theme || (preferDark ? 'dark' : 'light');
+    return getStyle(parsedStyles, {
+        ...options,
+        theme,
+        themeStrategy: 'fallback'
+    });
+};
 //# sourceMappingURL=index.js.map
