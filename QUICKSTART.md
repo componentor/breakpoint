@@ -83,7 +83,7 @@ const button = parse(`
 getStyle(button); // "background: blue; color: white;"
 
 // Hover
-getStyle(button, { state: 'hover' });
+getStyle(button, { states: ['hover'] });
 // "background: darkblue; color: white;"
 ```
 
@@ -106,7 +106,7 @@ function Button({ theme, isHovered }) {
   const css = useMemo(
     () => getStyle(BUTTON_STYLES, {
       theme,
-      state: isHovered ? 'hover' : undefined
+      states: isHovered ? ['hover'] : undefined
     }),
     [theme, isHovered]
   );

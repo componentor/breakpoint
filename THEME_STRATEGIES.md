@@ -97,7 +97,7 @@ const styles = parse(`
 
 getStyle(styles, {
   theme: 'light',
-  state: 'active',
+  states: ['active'],
   themeStrategy: 'fallback'
 });
 // Returns: "background: blue; transform: scale(0.98);"
@@ -210,7 +210,7 @@ const buttonStyles = parse(`
 
 const css = getStyle(buttonStyles, {
   theme: systemTheme,
-  state: 'hover',
+  states: ['hover'],
   themeStrategy: 'fallback'
 });
 ```
@@ -263,7 +263,7 @@ const cardStyles = parse(`
 function Card({ theme = 'light', children }) {
   const css = getStyle(cardStyles, {
     theme,
-    state: isHovered ? 'hover' : undefined,
+    states: isHovered ? ['hover'] : undefined,
     themeStrategy: 'fallback'
   });
 

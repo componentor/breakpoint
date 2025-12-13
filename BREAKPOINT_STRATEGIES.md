@@ -161,7 +161,7 @@ const complex = parse(`
 getStyle(complex, {
   theme: 'dark',
   breakpoint: 'lg',
-  state: 'hover',
+  states: ['hover'],
   breakpointStrategy: 'mobile-first'
 });
 // Includes: base + dark + sm + md + lg + hover + dark:hover:lg

@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.4.1] - 2025-12-13
+
+### Fixed
+
+- **Documentation**: Updated all documentation to reflect v1.4.0 API changes
+  - Changed `state:` → `states: []` in all examples across:
+    - README.md
+    - QUICKSTART.md
+    - USAGE.md
+    - THEME_STRATEGIES.md
+    - BREAKPOINT_STRATEGIES.md
+  - Added documentation for multiple states feature (`hover:active:bg:red`)
+  - Added documentation for camelCase/PascalCase property support
+  - Updated test count from 128 to 140
+
 ## [1.4.0] - 2025-12-13
 
 ### Added

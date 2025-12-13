@@ -26,7 +26,7 @@ import { parse, getStyle } from '@componentor/breakpoint';
 const styles = parse('bg:blue; text:white; hover:bg:darkblue; dark:bg:purple');
 
 getStyle(styles);                           // → "background: blue; color: white;"
-getStyle(styles, { state: 'hover' });       // → "background: darkblue; color: white;"
+getStyle(styles, { states: ['hover'] });    // → "background: darkblue; color: white;"
 getStyle(styles, { theme: 'dark' });        // → "background: purple; color: white;"
 ```
 
@@ -41,6 +41,7 @@ getStyle(styles, { theme: 'dark' });        // → "background: purple; color: w
 | **Themes** | `dark:bg:black` | Different colors for dark mode |
 | **Breakpoints** | `md:p:20px` | Responsive padding on tablets |
 | **States** | `hover:opacity:0.8` | Hover effects |
+| **Multiple States** | `hover:active:bg:red` | Combine states! |
 | **Combine All** | `dark:md:hover:bg:purple` | All conditions at once! |
 | **Aliases** | `bg` instead of `background` | 75+ shortcuts built-in |
 | **Custom Themes** | `sunset:bg:orange` | Name your themes anything |
@@ -100,7 +101,7 @@ const button = parse(`
 getStyle(button);
 
 // Desktop dark mode hover → Navy button, 16px padding, 18px text
-getStyle(button, { breakpoint: 'lg', theme: 'dark', state: 'hover' });
+getStyle(button, { breakpoint: 'lg', theme: 'dark', states: ['hover'] });
 ```
 
 ### Responsive Card Layout
@@ -144,7 +145,15 @@ condition:condition:property:value;
 'dark:color:white'              // Dark theme
 'md:color:purple'               // Medium breakpoint
 'hover:color:red'               // Hover state
+'hover:active:bg:red'           // Multiple states! 🆕
 'dark:md:hover:color:orange'    // All three! 🔥
+```
+
+**CamelCase & PascalCase properties work too!** 🆕
+```typescript
+parse('fontSize:16px');           // → font-size: 16px
+parse('backgroundColor:blue');    // → background-color: blue
+parse('borderTopLeftRadius:8px'); // → border-top-left-radius: 8px
 ```
 
 ---
@@ -310,7 +319,7 @@ const parsed = parse('bg:blue; dark:bg:purple; hover:opacity:0.8');
 Extract CSS for a specific context.
 
 ```typescript
-getStyle(parsed, { theme: 'dark', state: 'hover' });
+getStyle(parsed, { theme: 'dark', states: ['hover'] });
 // → "background: purple; opacity: 0.8;"
 ```
 
@@ -319,7 +328,7 @@ getStyle(parsed, { theme: 'dark', state: 'hover' });
 {
   theme?: 'dark' | 'light' | string;
   breakpoint?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | string;
-  state?: 'hover' | 'active' | 'focus' | 'disabled' | string;
+  states?: ('hover' | 'active' | 'focus' | 'disabled' | string)[];
   breakpointStrategy?: 'exact' | 'mobile-first' | 'desktop-first';
   themeStrategy?: 'strict' | 'fallback';
 }
@@ -442,7 +451,7 @@ import type { ParsedStyles, GetStyleOptions, Theme, Breakpoint, State } from '@c
 const options: GetStyleOptions = {
   theme: 'dark',
   breakpoint: 'md',
-  state: 'hover',
+  states: ['hover'],
   breakpointStrategy: 'mobile-first',
   themeStrategy: 'fallback'
 };
@@ -452,7 +461,7 @@ const options: GetStyleOptions = {
 
 ## 🧪 Testing
 
-128 tests. 100% passing. Built with confidence.
+140 tests. 100% passing. Built with confidence.
 
 ```bash
 npm test           # Run all tests

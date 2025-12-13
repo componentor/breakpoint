@@ -197,13 +197,13 @@ const buttonStyles = parse(`
 getStyle(buttonStyles);
 
 // Hover state
-getStyle(buttonStyles, { state: 'hover' });
+getStyle(buttonStyles, { states: ['hover'] });
 
 // Active state
-getStyle(buttonStyles, { state: 'active' });
+getStyle(buttonStyles, { states: ['active'] });
 
 // Disabled state
-getStyle(buttonStyles, { state: 'disabled' });
+getStyle(buttonStyles, { states: ['disabled'] });
 ```
 
 ### Complex Combinations
@@ -237,7 +237,7 @@ const cardStyles = parse(`
 getStyle(cardStyles);
 
 // Dark theme, tablet, hover
-getStyle(cardStyles, { theme: 'dark', breakpoint: 'md', state: 'hover' });
+getStyle(cardStyles, { theme: 'dark', breakpoint: 'md', states: ['hover'] });
 ```
 
 ## Framework Integration
@@ -405,7 +405,7 @@ class StyledElement {
     const css = getStyle(this.parsed, {
       theme: this.theme,
       breakpoint: this.breakpoint,
-      state: this.state,
+      states: this.state ? [this.state] : undefined,
     });
 
     // Apply styles
