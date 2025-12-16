@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.4.4] - 2025-12-16
+
+### Fixed
+
+- **Sourcemap Issue**: Fixed "points to missing source files" errors for npm package consumers
+  - Added `inlineSources: true` to TypeScript compiler options
+  - Source code is now embedded directly in sourcemap files
+  - Users no longer need the `src` folder present in `node_modules` for debugging
+  - Sourcemaps work correctly without increasing package size with unnecessary source files
+
 ## [1.4.3] - 2025-12-16
 
 ### Added
