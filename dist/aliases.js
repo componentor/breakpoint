@@ -41,6 +41,7 @@ export const DEFAULT_ALIASES = {
     'bg-origin': 'background-origin',
     // Text & Typography
     'text': 'color',
+    'op': 'opacity',
     // Layout & Sizing
     'w': 'width',
     'h': 'height',
@@ -77,6 +78,18 @@ export const DEFAULT_ALIASES = {
     'border-r': 'border-right',
     'border-b': 'border-bottom',
     'border-l': 'border-left',
+    'border-t-color': 'border-top-color',
+    'border-b-color': 'border-bottom-color',
+    'border-l-color': 'border-left-color',
+    'border-r-color': 'border-right-color',
+    'border-t-style': 'border-top-style',
+    'border-b-style': 'border-bottom-style',
+    'border-l-style': 'border-left-style',
+    'border-r-style': 'border-right-style',
+    'border-t-w': 'border-top-width',
+    'border-b-w': 'border-bottom-width',
+    'border-l-w': 'border-left-width',
+    'border-r-w': 'border-right-width',
     'rounded': 'border-radius',
     'rounded-tl': 'border-top-left-radius',
     'rounded-tr': 'border-top-right-radius',
@@ -132,7 +145,8 @@ export const DEFAULT_ALIASES = {
     // SVG
     'stroke-w': 'stroke-width',
     // Fonts
-    'size': 'font-size'
+    'size': 'font-size',
+    'fw': 'font-weight'
 };
 /**
  * User-registered custom aliases
