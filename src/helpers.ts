@@ -39,10 +39,16 @@ export function mergeAdapt(...adapts: AdaptInput[]): string {
 		normalized.split(';').forEach(prop => {
 			const trimmed = prop.trim();
 			if (trimmed) {
-				const colonIndex = trimmed.indexOf(':');
-				if (colonIndex > -1) {
-					const key = trimmed.substring(0, colonIndex).trim();
-					const value = trimmed.substring(colonIndex + 1).trim();
+				// Find the last colon that separates the key from value
+				// Format: conditions:property:value (e.g., "hover:dark:bg:red" or "bg:red")
+				// The key is everything except the final value segment
+				// We need to find where the property:value boundary is
+				const lastColonIndex = trimmed.lastIndexOf(':');
+				if (lastColonIndex > -1) {
+					// The key is everything before the last colon (conditions + property)
+					// The value is everything after the last colon
+					const key = trimmed.substring(0, lastColonIndex).trim();
+					const value = trimmed.substring(lastColonIndex + 1).trim();
 					if (key) styleMap[key] = value;
 				}
 			}

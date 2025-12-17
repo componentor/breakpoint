@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.5.2] - 2025-12-17
+
+### Fixed
+
+- **mergeAdapt Key Extraction**: Fixed critical bug where `mergeAdapt` was incorrectly merging styles with different conditions
+  - The function was using `indexOf(':')` to find the key boundary, causing styles like `hover:bg:white` and `hover:dark:bg:black` to both get key `"hover"`, overwriting each other
+  - Fixed by using `lastIndexOf(':')` so keys are now `"hover:bg"` and `"hover:dark:bg"` respectively
+  - This was causing themed hover states to override base hover states even in light mode
+
+  ```typescript
+  // Before (broken): both got key "hover"
+  mergeAdapt('hover:bg:white', 'hover:dark:bg:black');
+  // Result: 'hover:black' (wrong!)
+
+  // After (fixed): proper keys "hover:bg" and "hover:dark:bg"
+  mergeAdapt('hover:bg:white', 'hover:dark:bg:black');
+  // Result: 'hover:bg:white;hover:dark:bg:black' (correct!)
+  ```
+
+- Added 22 tests for `normalizeAdapt` and `mergeAdapt` helper functions (168 total tests)
+
 ## [1.5.1] - 2025-12-17
 
 ### Fixed

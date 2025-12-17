@@ -1,6 +1,6 @@
 {
   "name": "@componentor/adaptive",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "Parse and manage adaptive CSS styles with breakpoints, themes, and states using a compact colon syntax",
   "keywords": [
     "css",
