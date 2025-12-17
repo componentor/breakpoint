@@ -181,7 +181,7 @@
 
 ### Documentation
 
-- Added [INTELLISENSE.md](INTELLISENSE.md) - Comprehensive IntelliSense guide
+- Added [INTELLISENSE.md](docs/INTELLISENSE.md) - Comprehensive IntelliSense guide
 - Updated all documentation with IntelliSense examples
 - Added integration examples for styled-components, emotion, vanilla-extract
 
@@ -295,7 +295,7 @@ When using `themeStrategy: 'fallback'`:
 
 ### Documentation
 
-- Added [THEME_STRATEGIES.md](THEME_STRATEGIES.md) with comprehensive guide
+- Added [THEME_STRATEGIES.md](docs/THEME_STRATEGIES.md) with comprehensive guide
   - Detailed fallback behavior explanation
   - Custom theme naming conventions
   - Real-world examples (system theme detection, multi-brand theming)
@@ -333,7 +333,7 @@ When using `themeStrategy: 'fallback'`:
 
 ### Documentation
 
-- Added [BREAKPOINT_STRATEGIES.md](BREAKPOINT_STRATEGIES.md) with comprehensive guide
+- Added [BREAKPOINT_STRATEGIES.md](docs/BREAKPOINT_STRATEGIES.md) with comprehensive guide
 - Added 20 new tests for breakpoint strategies (65 total tests)
 - All existing tests pass with backwards compatibility
 

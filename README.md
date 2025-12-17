@@ -281,7 +281,7 @@ const styles = createStyleBuilder()
   .build();
 ```
 
-**[Check out INTELLISENSE.md for the full guide →](INTELLISENSE.md)**
+**[Check out INTELLISENSE.md for the full guide →](docs/INTELLISENSE.md)**
 
 ---
 
@@ -389,10 +389,10 @@ Works out of the box in modern browsers:
 
 ## 📚 Advanced Guides
 
-- **[IntelliSense Guide](INTELLISENSE.md)** - Type-safe builder API with autocomplete
-- **[Theme Strategies](THEME_STRATEGIES.md)** - Deep dive into theme fallback logic
-- **[Breakpoint Strategies](BREAKPOINT_STRATEGIES.md)** - Mobile-first vs desktop-first
-- **[Usage Examples](USAGE.md)** - Real-world integration patterns
+- **[IntelliSense Guide](docs/INTELLISENSE.md)** - Type-safe builder API with autocomplete
+- **[Theme Strategies](docs/THEME_STRATEGIES.md)** - Deep dive into theme fallback logic
+- **[Breakpoint Strategies](docs/BREAKPOINT_STRATEGIES.md)** - Mobile-first vs desktop-first
+- **[Usage Examples](docs/USAGE.md)** - Real-world integration patterns
 
 ---
 
